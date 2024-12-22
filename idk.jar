@@ -1,0 +1,30 @@
+public class MainActivity extends AppCompatActivity {
+
+    private Socket socket;
+    private DataInputStream inputStream;
+    private DataOutputStream outputStream;
+
+    private static final int SERVERPORT = 8080;
+    private static final String SERVER_IP = "192.168.0.10"; // Replace with the IP address of the Arduino board
+
+    private TextView txtData;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        txtData = findViewById(R.id.txtData);
+
+        new Thread(new ClientThread()).start();
+    }
+
+    private class ClientThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
+                socket = new Socket(serverAddr, SERVERPORT);
+
+                inputStream = new DataInputStream(socket.getInputStream());
+                outputStream = new DataOutputStream(socket.get
